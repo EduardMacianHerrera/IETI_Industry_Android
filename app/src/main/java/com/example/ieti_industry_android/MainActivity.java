@@ -62,9 +62,13 @@ public class MainActivity extends AppCompatActivity {
                 HashMap<String, String> users = socket.getUsers();
                 for (String key : users.keySet()) {
                     if (user.getText().toString().equals(key) && password.getText().toString().equals(users.get(user.getText().toString()))) {
+                        /*
                         Intent intent = new Intent(MainActivity.this, ScreenControls.class);
                         ScreenControls.socket = socket;
                         startActivity(intent);
+
+                         */
+                        Toast.makeText(MainActivity.this, "LOGIN CORRECTE", Toast.LENGTH_SHORT).show();
                     }
                 }
 
