@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.ieti_industry_android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IETI_Industry_Android"
         tools:targetApi="31">
+        <activity
+            android:name=".ScreenControls"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
