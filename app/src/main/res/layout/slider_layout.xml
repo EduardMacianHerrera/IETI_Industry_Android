@@ -18,15 +18,15 @@
         <TextView
             android:id="@+id/label"
             android:layout_width="6dp"
-            android:layout_height="42dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="TextView" />
 
 
         <com.google.android.material.slider.Slider
             android:id="@+id/intents"
-            android:layout_width="wrap_content"
-            android:layout_height="42dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1" />
 
     </LinearLayout>

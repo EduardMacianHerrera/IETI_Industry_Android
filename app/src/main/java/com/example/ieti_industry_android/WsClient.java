@@ -9,9 +9,11 @@ import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -33,10 +35,9 @@ public class WsClient {
                 @Override
                 public void onMessage(ByteBuffer message) {
                     Object obj = bytesToObject(message);
-                    if (obj.getClass().getSimpleName().equalsIgnoreCase("HashMap")) {
-                        users = (HashMap<String, String>) obj;
-                    } else if (obj.getClass().getSimpleName().equalsIgnoreCase("File")) {
-                        file = (File) obj;
+                    String[] user = (String[]) obj;
+                    for (String s : user) {
+                        System.out.println(s);
                     }
                 }
 
@@ -66,7 +67,7 @@ public class WsClient {
         }
     }
 
-    public File getXml() {
+    public File getModel() {
         client.send("getModel");
         try {
             Thread.sleep(100);
@@ -76,17 +77,6 @@ public class WsClient {
         return file;
     }
 
-    public HashMap<String, String> getUsers() {
-        client.send("getUsers");
-        while (users == null) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        return users;
-    }
 
     public static Object bytesToObject(ByteBuffer arr) {
         Object result = null;
@@ -107,6 +97,19 @@ public class WsClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return result;
+    }
+
+    public static byte[] objToBytes (Object obj) {
+        byte[] result = null;
+        try {
+            // Transforma l'objecte a bytes[]
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(obj);
+            oos.flush();
+            result = bos.toByteArray();
+        } catch (IOException e) { e.printStackTrace(); }
         return result;
     }
 }

@@ -16,13 +16,13 @@ public class ScreenControls extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_controls);
 
-        File dataFile = socket.getXml();
+        File dataFile = socket.getModel();
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        XmlReader.cargarConfig(dataFile, modelo, this);
+
 
     }
 }

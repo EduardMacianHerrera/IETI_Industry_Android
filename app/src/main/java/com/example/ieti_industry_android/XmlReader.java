@@ -75,7 +75,7 @@ public class XmlReader {
         ControlElement controlTemp;
         try {
             controlTemp = crearControl(id, labelControl, tipoControl, elmControl, context);
-            modelo.getControles().add(controlTemp);
+            //modelo.getControles().add(controlTemp);
         } catch (Exception e) {
             System.out.println("Error de formato en un control "+control.getNodeName());
         }
@@ -161,7 +161,7 @@ public class XmlReader {
         controlTemp.setValoresComboBox(valoresComboBox);
         controlTemp.setTipoControl("dropdown");
 
-        modelo.getControles().add(controlTemp);
+        //modelo.getControles().add(controlTemp);
     }
 
 }
