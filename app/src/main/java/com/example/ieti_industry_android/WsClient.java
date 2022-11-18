@@ -1,5 +1,6 @@
 package com.example.ieti_industry_android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -25,8 +26,9 @@ public class WsClient {
     String location = "10.0.2.2";
     String uri = "ws://" + location + ":" + port;
     WebSocketClient client;
-    HashMap<String, String> users;
-    File file;
+    static Activity currentActivity;
+
+
 
     public void connecta() {
         try {
@@ -42,6 +44,9 @@ public class WsClient {
                 }
 
                 public void onMessage(String message) {
+                    if ((message.equalsIgnoreCase("true") || message.equalsIgnoreCase("false")) && currentActivity instanceof MainActivity) {
+                        ((MainActivity) currentActivity).login(Boolean.parseBoolean(message));
+                    }
                 }
 
                 @Override
@@ -51,7 +56,9 @@ public class WsClient {
 
                 @Override
                 public void onClose(int code, String reason, boolean remote) {
-                    System.out.println("Disconnected from: " + getURI());
+                    if (currentActivity instanceof ScreenControls) {
+                        ((ScreenControls) currentActivity).connectionLost();
+                    }
                 }
 
                 @Override
@@ -65,16 +72,6 @@ public class WsClient {
             e.printStackTrace();
             System.out.println("Error: " + uri + " no és una direcció URI de WebSocket vàlida");
         }
-    }
-
-    public File getModel() {
-        client.send("getModel");
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return file;
     }
 
 

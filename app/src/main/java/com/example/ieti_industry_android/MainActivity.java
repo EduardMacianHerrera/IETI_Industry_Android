@@ -2,6 +2,8 @@ package com.example.ieti_industry_android;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     int port = 8888;
     String location = "10.0.2.2";
     String uri = "ws://" + location + ":" + port;
-    WsClient socket = new WsClient();
+    static WsClient socket = new WsClient();
 
 
     @Override
@@ -44,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         final EditText server = findViewById(R.id.Server);
         final EditText user = findViewById(R.id.User);
         final EditText password = findViewById(R.id.Password);
+
+        WsClient.currentActivity = this;
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 String[] arrayUser = {user.getText().toString(), password.getText().toString()};
                 socket.client.send(socket.objToBytes(arrayUser));
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
             }
         });
@@ -68,5 +77,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void login(boolean isCorrect) {
+        if (isCorrect) {
+            ScreenControls.socket = MainActivity.socket;
+            Intent intent = new Intent(MainActivity.this, ScreenControls.class);
+            startActivity(intent);
+        } else {
+            AlertDialog.Builder popup = new AlertDialog.Builder(MainActivity.this);
+            popup.setTitle("Login incorrecte, revisi els credencials");
+            popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            popup.create();
+            popup.show();
+        }
+    }
 
 }
