@@ -28,4 +28,24 @@ public class Block {
     }
 
     public void addSensor(Sensor s) { sensors.add(s); }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<ToggleButton> getToggleButtons() {
+        return toggleButtons;
+    }
+
+    public ArrayList<Slider> getSliders() {
+        return sliders;
+    }
+
+    public ArrayList<Dropdown> getDropdowns() {
+        return dropdowns;
+    }
+
+    public ArrayList<Sensor> getSensors() {
+        return sensors;
+    }
 }

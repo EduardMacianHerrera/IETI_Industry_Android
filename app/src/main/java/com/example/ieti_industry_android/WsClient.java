@@ -46,6 +46,8 @@ public class WsClient {
                 public void onMessage(String message) {
                     if ((message.equalsIgnoreCase("true") || message.equalsIgnoreCase("false")) && currentActivity instanceof MainActivity) {
                         ((MainActivity) currentActivity).login(Boolean.parseBoolean(message));
+                    } else {
+                        ((ScreenControls) currentActivity).loadModel(message);
                     }
                 }
 

@@ -33,6 +33,7 @@ public class ScreenControls extends AppCompatActivity {
         setContentView(R.layout.activity_screen_controls);
 
         WsClient.currentActivity = this;
+        socket.client.send("Get Model");
 
         // CREATE TABLE
         TableLayout tableLayout = new TableLayout(this);
@@ -100,14 +101,14 @@ public class ScreenControls extends AppCompatActivity {
 
             // ADD TEXTVIEW TO TABLEROW
 
-            tableRow.addView(a);
+            tableRow.addView(createSwitchTable(tableLayout));
             tableRow.addView(b);
             tableRow.addView(c);
             tableRow.addView(d);
 
             // ADD TABLEROW TO TABLELAYOUT
 
-            tableLayout.addView(tableRow);
+            //tableLayout.addView(tableRow);
         }
 
         Button logoutButton = findViewById(R.id.logoutButton);
@@ -119,6 +120,16 @@ public class ScreenControls extends AppCompatActivity {
         });
 
 
+    }
+
+    public void loadModel(String s) {
+        this.modelo = new Modelo(s);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(modelo);
     }
 
     public void logout() {
@@ -167,5 +178,39 @@ public class ScreenControls extends AppCompatActivity {
         spinner.setAdapter(adapter);
         spinner.setSelection(index);
         return spinner;
+    }
+
+    public TextView createSensor(Sensor s) {
+        TextView t = new TextView(this);
+        t.setText(s.getThresholdLow() + " " + s.getUnits());
+        return t;
+    }
+
+    public TableLayout createSwitchTable(TableLayout l) {
+        TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+        TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        TableLayout table = new TableLayout(this);
+        for (ToggleButton t : modelo.blocks.get(0).getToggleButtons()) {
+            TableRow row = new TableRow(this);
+            TextView textLabel = new TextView(this);
+            Switch s = createSwitch(t);
+
+            s.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            textLabel.setText(t.getLabel());
+            textLabel.setLayoutParams(params1);
+            s.setLayoutParams(params1);
+
+            row.addView(textLabel);
+            row.addView(s);
+            row.setLayoutParams(params2);
+            table.addView(row);
+        }
+        return table;
     }
 }
