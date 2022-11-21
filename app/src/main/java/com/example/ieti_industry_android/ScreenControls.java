@@ -176,7 +176,7 @@ public class ScreenControls extends AppCompatActivity {
     public Slider createSlider(com.example.ieti_industry_android.Slider s) {
         Slider slider = new Slider(this);
         slider.setValueFrom(s.getMin());
-        slider.setValueFrom(s.getMax());
+        slider.setValueTo(s.getMax());
         slider.setValue(s.getState());
         slider.setStepSize(s.getStep());
         return slider;
@@ -222,7 +222,14 @@ public class ScreenControls extends AppCompatActivity {
             s.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    String state = "";
+                    if (s.isChecked()){
+                        state = "on";
+                    } else {
+                        state = "off";
+                    }
+                    String[] values = {"block1",String.valueOf(s.getId()),"switch",state};
+                    socket.change(values);
                 }
             });
 
@@ -273,6 +280,50 @@ public class ScreenControls extends AppCompatActivity {
         return table;
     }
 
+    public TableLayout createSliderTable() {
+        TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+        TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        TableLayout table = new TableLayout(this);
+        System.out.println("Cantidad de bloques: "+modelo.blocks.size());
+        for (com.example.ieti_industry_android.Slider s : modelo.blocks.get(0).getSliders()) {
+            TableRow row = new TableRow(this);
+            TextView textLabel = new TextView(this);
+            Slider slider = createSlider(s);
+
+            textLabel.setText(s.getLabel());
+            textLabel.setLayoutParams(params1);
+            slider.setLayoutParams(params1);
+
+            row.addView(textLabel);
+            row.addView(slider);
+            row.setLayoutParams(params2);
+            table.addView(row);
+        }
+        return table;
+    }
+
+    public TableLayout createSensorTable() {
+        TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+        TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        TableLayout table = new TableLayout(this);
+        System.out.println("Cantidad de bloques: "+modelo.blocks.size());
+        for (Sensor s : modelo.blocks.get(0).getSensors()) {
+            TableRow row = new TableRow(this);
+            TextView textLabel = new TextView(this);
+            TextView sensor = createSensor(s);
+
+            textLabel.setText(s.getLabel());
+            textLabel.setLayoutParams(params1);
+            sensor.setLayoutParams(params1);
+
+            row.addView(textLabel);
+            row.addView(sensor);
+            row.setLayoutParams(params2);
+            table.addView(row);
+        }
+        return table;
+    }
+
     public TableLayout tableLayout(){
 
         // CREATE TABLE
@@ -295,10 +346,10 @@ public class ScreenControls extends AppCompatActivity {
         // CREATE TABLE ROW
         tableRow = new TableRow(this);
         // ADD TABLEROW TO TABLELAYOUT
+        tableRow.addView(createSliderTable());
+        tableRow.addView(createSensorTable());
 
         tableLayout.addView(tableRow);
-;
-
 
         return tableLayout;
     }
