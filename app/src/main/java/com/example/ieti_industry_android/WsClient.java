@@ -44,10 +44,11 @@ public class WsClient {
                 }
 
                 public void onMessage(String message) {
+                    System.out.println(message);
                     if ((message.equalsIgnoreCase("true") || message.equalsIgnoreCase("false")) && currentActivity instanceof MainActivity) {
                         ((MainActivity) currentActivity).login(Boolean.parseBoolean(message));
                     } else {
-                        ((ScreenControls) currentActivity).loadModel(message);
+                        ((MainActivity) currentActivity).loadModel(message);
                     }
                 }
 

@@ -59,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
                  */
                 socket.connecta();
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 String[] arrayUser = {user.getText().toString(), password.getText().toString()};
                 socket.client.send(socket.objToBytes(arrayUser));
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void login(boolean isCorrect) {
         if (isCorrect) {
+            socket.client.send("getModel");
             ScreenControls.socket = MainActivity.socket;
             Intent intent = new Intent(MainActivity.this, ScreenControls.class);
             startActivity(intent);
@@ -94,6 +95,16 @@ public class MainActivity extends AppCompatActivity {
             popup.create();
             popup.show();
         }
+    }
+
+    public void loadModel(String s) {
+        ScreenControls.modelo = new Modelo(s);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(ScreenControls.modelo);
     }
 
 }

@@ -7,9 +7,15 @@ public class Modelo {
 
     public Modelo(String s) {loadModel(s);}
 
-    public static void loadModel(String string) {
+    public void loadModel(String string) {
 
         String[] blockArray = string.split(";];");
+        System.out.println(string);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         for (String blockString : blockArray) {
             blockString += ";";
             String blockName = blockString.substring(0, blockString.indexOf(":"));
@@ -17,7 +23,7 @@ public class Modelo {
             //System.out.println(block);
             String[] controlArray = blockString.substring(blockString.indexOf(":") + 2).split(";");
             for (String controlString : controlArray) {
-                //System.out.println(control);
+                System.out.println(controlString);
                 String controlType = controlString.substring(0, controlString.indexOf(":"));
                 String[] attrs = controlString.substring(controlString.indexOf(":[") + 2).split(",");
                 int id = 0;
@@ -28,6 +34,7 @@ public class Modelo {
                         for (String attr : attrs) {
                             switch (attr.substring(0, attr.indexOf("="))) {
                                 case "state":
+                                    System.out.println(attr.substring(attr.indexOf("=" + 1)));
                                     stateSwitch = attr.substring(attr.indexOf("=" + 1));
                                     break;
                                 case "id":
@@ -133,6 +140,7 @@ public class Modelo {
                         break;
                 }
             }
+            blocks.add(block);
         }
     }
 }

@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TableLayout;
@@ -33,7 +35,11 @@ public class ScreenControls extends AppCompatActivity {
         setContentView(R.layout.activity_screen_controls);
 
         WsClient.currentActivity = this;
-        socket.client.send("Get Model");
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // CREATE TABLE
         TableLayout tableLayout = new TableLayout(this);
@@ -101,7 +107,7 @@ public class ScreenControls extends AppCompatActivity {
 
             // ADD TEXTVIEW TO TABLEROW
 
-            tableRow.addView(createSwitchTable(tableLayout));
+            tableRow.addView(createSwitchTable());
             tableRow.addView(b);
             tableRow.addView(c);
             tableRow.addView(d);
@@ -110,6 +116,24 @@ public class ScreenControls extends AppCompatActivity {
 
             //tableLayout.addView(tableRow);
         }
+
+        ScrollView contentView = new ScrollView(this);
+        contentView.setBackgroundColor(Color.LTGRAY);
+
+        // THIS IS OUR MAIN LAYOUT
+        LinearLayout mainLayout = new LinearLayout(this);
+        mainLayout.setOrientation(LinearLayout.VERTICAL);
+
+        // ADD MAINLAYOUT TO SCROLLVIEW (contentView)
+
+        contentView.addView(mainLayout);
+
+        // SET CONTENT VIEW
+
+        setContentView(contentView);
+
+
+
 
         Button logoutButton = findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -120,16 +144,6 @@ public class ScreenControls extends AppCompatActivity {
         });
 
 
-    }
-
-    public void loadModel(String s) {
-        this.modelo = new Modelo(s);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println(modelo);
     }
 
     public void logout() {
@@ -186,7 +200,7 @@ public class ScreenControls extends AppCompatActivity {
         return t;
     }
 
-    public TableLayout createSwitchTable(TableLayout l) {
+    public TableLayout createSwitchTable() {
         TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
         TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
         TableLayout table = new TableLayout(this);
