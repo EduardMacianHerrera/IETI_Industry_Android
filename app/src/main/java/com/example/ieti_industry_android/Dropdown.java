@@ -4,11 +4,12 @@ import java.util.ArrayList;
 
 public class Dropdown extends Control {
     String state;
-    ArrayList<Option> options = new ArrayList<Option>();
+    ArrayList<Option> options;
 
-    public Dropdown(String label, int id, String state) {
+    public Dropdown(String label, int id, String state, ArrayList<Option> options) {
         super(label, id);
         this.state = state;
+        this.options = options;
     }
 
     public String getLabel() {

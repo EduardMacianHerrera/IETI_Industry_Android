@@ -1,9 +1,9 @@
 package com.example.ieti_industry_android;
 
-public class Switch extends Control{
+public class ToggleButton extends Control{
     String state;
 
-    public Switch(String state, int id, String label) {
+    public ToggleButton(String state, int id, String label) {
         super(label, id);
         this.state = state;
     }

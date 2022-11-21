@@ -3,20 +3,9 @@ package com.example.ieti_industry_android;
 import java.util.ArrayList;
 
 public class Modelo {
-    static String a = "block1:[" +
-            "Switch:[state=on,id=0,label=label];" +
-            "Slider:[label=Label,id=1,state=4,min=0,step=0];" +
-            "Dropdown:[label=Etiqueta,id=2,state=3,options=[label=Label 2&value=2$label=Label 3&value=3&];" +
-            "Sensor:[id=3,units=ºC,thresholdHigh=10,thresholdLow=5,label=Label];];" +
-            "block2:[" +
-            "Switch:[state=on,id=0];" +
-            "Slider:[label=Label,id=1,state=4,min=0,step=0];" +
-            "Dropdown:[label=Etiqueta,id=2,state=3,options=[label=Label 2&value=2$label=Label 3&value=3&];" +
-            "Sensor:[id=3,units=ºC,thresholdHigh=10,thresholdLow=5,label=Label];];";
+    ArrayList<Block> blocks = new ArrayList<Block>();
 
-    public static void main(String[] args) {
-        loadModel(a);
-    }
+    public Modelo(String s) {loadModel(s);}
 
     public static void loadModel(String string) {
 
@@ -31,61 +20,116 @@ public class Modelo {
                 //System.out.println(control);
                 String controlType = controlString.substring(0, controlString.indexOf(":"));
                 String[] attrs = controlString.substring(controlString.indexOf(":[") + 2).split(",");
+                int id = 0;
+                String label = null;
                 switch (controlType) {
-                    String state;
-                    int id;
-                    String label;
                     case "Switch":
-                        state = null;
-                        id = 0;
-                        label = null;
+                        String stateSwitch = null;
                         for (String attr : attrs) {
                             switch (attr.substring(0, attr.indexOf("="))) {
                                 case "state":
-                                    state = attr.substring(attr.indexOf("="+ 1));
+                                    stateSwitch = attr.substring(attr.indexOf("=" + 1));
+                                    break;
                                 case "id":
-                                    id = Integer.parseInt(attr.substring(attr.indexOf("=")+1));
+                                    id = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
                                 case "label":
-                                    label = attr.substring(attr.indexOf("=")+1);
+                                    label = attr.substring(attr.indexOf("=") + 1);
+                                    break;
                             }
                         }
-                        block.addSwitch(new Switch(state, id, label));
+                        block.addSwitch(new ToggleButton(stateSwitch, id, label));
                         break;
                     case "Dropdown":
+                        String stateDrop = null;
+                        ArrayList<Option> options = new ArrayList<Option>();
                         for (String attr : attrs) {
-                            state = null;
-                            id = 0;
-                            label = null;
-                            if (attr.substring(0, attr.indexOf("=")).equals("label")) {
-                                label = attr.substring(attr.indexOf("=") + 1);
-                            } else if (attr.substring(0, attr.indexOf("=")).equals("id")) {
-                                id = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
-                            } else if (attr.substring(0, attr.indexOf("=")).equals("state")) {
-                                state = attr.substring(attr.indexOf("=") + 1);
-                            } else if (attr.substring(0, attr.indexOf("=")).equals("options")) {
-                                String[] optionArray = attr.substring(attr.indexOf("=") + 1).split("\\$");
-                                for (String optionLabel : optionArray) {
-                                    String[] optionAttrs = optionLabel.split("&");
-                                    for (String optionAttr : optionAttrs) {
-                                        String labelOption = null;
-                                        String valueOption = null;
-                                        switch (optionAttr.substring(0, optionAttr.indexOf("="))) {
-                                            case "label":
-
+                            switch (attr.substring(0, attr.indexOf("="))) {
+                                case "label":
+                                    label = attr.substring(attr.indexOf("=") + 1);
+                                    break;
+                                case "id":
+                                    id = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
+                                case "state":
+                                    stateDrop = attr.substring(attr.indexOf("=") + 1);
+                                    break;
+                                case "options":
+                                    String[] optionArray = attr.substring(attr.indexOf("=") + 1).split("\\$");
+                                    for (String optionLabel : optionArray) {
+                                        String[] optionAttrs = optionLabel.split("&");
+                                        for (String optionAttr : optionAttrs) {
+                                            String labelOption = null;
+                                            String valueOption = null;
+                                            switch (optionAttr.substring(0, optionAttr.indexOf("="))) {
+                                                case "label":
+                                                    labelOption = optionAttr.substring(optionAttr.indexOf("=") + 1);
+                                                    break;
+                                                case "value":
+                                                    valueOption = optionAttr.substring(optionAttr.indexOf("=") + 1);
+                                                    break;
+                                            }
+                                            options.add(new Option(labelOption, valueOption));
                                         }
                                     }
-                                }
-
+                                    break;
                             }
                         }
+                        block.addDropdown(new Dropdown(label, id, stateDrop, options));
                         break;
                     case "Sensor":
+                        String units = null;
+                        int thresholdLow = 0;
+                        int thresholdHigh = 0;
                         for (String attr : attrs) {
-
+                            switch (attr.substring(0, attr.indexOf("="))) {
+                                case "id":
+                                    id = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
+                                case "units":
+                                    units = attr.substring(attr.indexOf("=") + 1);
+                                    break;
+                                case "label":
+                                    label = attr.substring(attr.indexOf("=") + 1);
+                                    break;
+                                case "thresholdHigh":
+                                    thresholdHigh = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
+                                case "thresholdLow":
+                                    thresholdLow = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
+                            }
                         }
+                        block.addSensor(new Sensor(id, units, thresholdHigh, thresholdLow, label));
                         break;
                     case "Slider":
-                        System.out.println(4);
+                        int min = 0;
+                        int stateSlider = 0;
+                        int step = 0;
+                        int max = 0;
+                        for (String attr : attrs) {
+                            switch (attr.substring(0, attr.indexOf("="))) {
+                                case "state":
+                                    stateSlider = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
+                                case "id":
+                                    id = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
+                                case "label":
+                                    label = attr.substring(attr.indexOf("=") + 1);
+                                    break;
+                                case "min":
+                                    min = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
+                                case "max":
+                                    max = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
+                                case "step":
+                                    step = Integer.parseInt(attr.substring(attr.indexOf("=") + 1));
+                                    break;
+                            }
+                        }
+                        block.addSlider(new Slider(id, label, stateSlider, min, max, step));
                         break;
                 }
             }
