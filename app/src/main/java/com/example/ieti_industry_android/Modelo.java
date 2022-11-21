@@ -66,24 +66,29 @@ public class Modelo {
                                         stateDrop = attr.substring(attr.indexOf("=") + 1);
                                         break;
                                     case "options":
-                                        String[] optionArray = attr.substring(attr.indexOf("=") + 1).split("\\$");
+                                        String[] optionArray = attr.substring(attr.indexOf("=") + 2).split("\\$");
                                         for (String optionLabel : optionArray) {
                                             String[] optionAttrs = optionLabel.split("&");
                                             String labelOption = null;
                                             String valueOption = null;
                                             for (String optionAttr : optionAttrs) {
+                                                System.out.println(optionAttr);
                                                 if (!optionAttr.equals("]")){
                                                     switch (optionAttr.substring(0, optionAttr.indexOf("="))) {
                                                         case "label":
                                                             labelOption = optionAttr.substring(optionAttr.indexOf("=") + 1);
+                                                            System.out.println("label " + labelOption);
                                                             break;
                                                         case "value":
                                                             valueOption = optionAttr.substring(optionAttr.indexOf("=") + 1);
+                                                            System.out.println("value " + valueOption);
                                                             break;
                                                     }
                                                 }
                                             }
-                                            options.add(new Option(labelOption, valueOption));
+                                            if (!(labelOption == null) && !(valueOption == null)){
+                                                options.add(new Option(labelOption, valueOption));
+                                            }
                                         }
                                         break;
                                 }

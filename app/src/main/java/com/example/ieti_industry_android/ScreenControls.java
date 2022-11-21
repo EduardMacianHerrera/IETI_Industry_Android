@@ -1,5 +1,6 @@
 package com.example.ieti_industry_android;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -41,11 +43,13 @@ public class ScreenControls extends AppCompatActivity {
                 logout();
             }
         });
+        Switch s = findViewById(R.id.switchprueba);
+
 
         WsClient.currentActivity = this;
 
         // CREATE TABLE
-        TableLayout tableLayout = createSwitchTable();
+        TableLayout tableLayout = tableLayout();
 
         /*for(int x = 0 ; x < 3 ; x ++){
 
@@ -141,11 +145,11 @@ public class ScreenControls extends AppCompatActivity {
 
         View contentView = tableLayout;
         setContentView(contentView);
-
-
-
-
     }
+
+
+
+
 
     public void logout() {
         Intent intent = new Intent(ScreenControls.this, MainActivity.class);
@@ -162,6 +166,7 @@ public class ScreenControls extends AppCompatActivity {
 
     public Switch createSwitch(ToggleButton t) {
         Switch s = new Switch(this);
+        s.setId(t.getId());
         if (t.getState().equals("on")) {
             s.setChecked(true);
         }
@@ -184,6 +189,8 @@ public class ScreenControls extends AppCompatActivity {
         for (int i = 0; i < d.getoptions().size(); i++) {
             Option o = d.getoptions().get(i);
             listOptions.add(o.getLabel());
+            System.out.println("a" + o.getValue());
+            System.out.println("b" + d.getState());
             if (o.getValue().equals(d.getState())) {
                 index = i;
             }
@@ -229,5 +236,70 @@ public class ScreenControls extends AppCompatActivity {
             table.addView(row);
         }
         return table;
+    }
+
+    public TableLayout createSpinnerTable() {
+        TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+        TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        TableLayout table = new TableLayout(this);
+        System.out.println("Cantidad de bloques: "+modelo.blocks.size());
+        for (Dropdown d : modelo.blocks.get(0).getDropdowns()) {
+
+            TableRow row = new TableRow(this);
+            TextView textLabel = new TextView(this);
+            Spinner s = createSpinner(d);
+
+            s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
+            textLabel.setText(d.getLabel());
+            textLabel.setLayoutParams(params1);
+            s.setLayoutParams(params1);
+
+            row.addView(textLabel);
+            row.addView(s);
+            row.setLayoutParams(params2);
+            table.addView(row);
+        }
+        return table;
+    }
+
+    public TableLayout tableLayout(){
+
+        // CREATE TABLE
+        TableLayout tableLayout = new TableLayout(this);
+
+        // CREATE TABLE ROW
+        TableRow tableRow = new TableRow(this);
+
+        // CREATE PARAM FOR MARGINING
+        TableRow.LayoutParams aParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.WRAP_CONTENT);
+        aParams.topMargin = 2;
+        aParams.rightMargin = 2;
+        // ADD TABLEROW TO TABLELAYOUT
+
+        tableLayout.addView(tableRow);
+
+        tableRow.addView(createSwitchTable());
+        tableRow.addView(createSpinnerTable());
+
+        // CREATE TABLE ROW
+        tableRow = new TableRow(this);
+        // ADD TABLEROW TO TABLELAYOUT
+
+        tableLayout.addView(tableRow);
+;
+
+
+        return tableLayout;
     }
 }

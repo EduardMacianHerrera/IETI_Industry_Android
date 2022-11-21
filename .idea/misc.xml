@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_dropdown.xml" value="0.16" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_screen_controls.xml" value="0.176" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_sensor.xml" value="0.11302083333333333" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_slider.xml" value="0.16799999999999998" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_switch.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/slider_layout.xml" value="0.1793478260869565" />
+      </map>
+    </option>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

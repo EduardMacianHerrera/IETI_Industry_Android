@@ -17,6 +17,18 @@
         android:theme="@style/Theme.IETI_Industry_Android"
         tools:targetApi="31">
         <activity
+            android:name=".SliderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SensorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DropdownActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SwitchActivity"
+            android:exported="false" />
+        <activity
             android:name=".ScreenControls"
             android:exported="false" />
         <activity

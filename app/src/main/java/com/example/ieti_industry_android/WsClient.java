@@ -113,4 +113,8 @@ public class WsClient {
         } catch (IOException e) { e.printStackTrace(); }
         return result;
     }
+
+    public void change(String[] arrayDades) {
+        client.send(objToBytes(arrayDades));
+    }
 }
