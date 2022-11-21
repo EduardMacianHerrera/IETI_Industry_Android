@@ -107,14 +107,14 @@ public class ScreenControls extends AppCompatActivity {
 
             // ADD TEXTVIEW TO TABLEROW
 
-            tableRow.addView(createSwitchTable());
+            tableRow.addView(a);
             tableRow.addView(b);
             tableRow.addView(c);
             tableRow.addView(d);
 
             // ADD TABLEROW TO TABLELAYOUT
 
-            //tableLayout.addView(tableRow);
+            tableLayout.addView(tableRow);
         }
 
         ScrollView contentView = new ScrollView(this);
@@ -132,7 +132,9 @@ public class ScreenControls extends AppCompatActivity {
 
         setContentView(contentView);
 
+        TableLayout tableLayoutProgrammatically = tableLayout;
 
+        mainLayout.addView(tableLayoutProgrammatically);
 
 
         Button logoutButton = findViewById(R.id.logoutButton);
