@@ -36,6 +36,7 @@ public class WsClient {
             client = new WebSocketClient(new URI(uri), (Draft) new Draft_6455()) {
                 @Override
                 public void onMessage(ByteBuffer message) {
+                    System.out.println("Array recibido: "+message);
                     Object obj = bytesToObject(message);
                     String[] user = (String[]) obj;
                     for (String s : user) {
@@ -44,10 +45,10 @@ public class WsClient {
                 }
 
                 public void onMessage(String message) {
-                    System.out.println(message);
+                    System.out.println("Mensaje: "+message);
                     if ((message.equalsIgnoreCase("true") || message.equalsIgnoreCase("false")) && currentActivity instanceof MainActivity) {
                         ((MainActivity) currentActivity).login(Boolean.parseBoolean(message));
-                    } else {
+                    } else if (message.contains("block")){
                         ((MainActivity) currentActivity).loadModel(message);
                     }
                 }

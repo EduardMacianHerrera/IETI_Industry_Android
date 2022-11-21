@@ -58,19 +58,13 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("PASS", password.getText().toString());
                  */
                 socket.connecta();
+                String[] arrayUser = {user.getText().toString(), password.getText().toString()};
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                String[] arrayUser = {user.getText().toString(), password.getText().toString()};
                 socket.client.send(socket.objToBytes(arrayUser));
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
             }
         });
 
@@ -98,13 +92,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadModel(String s) {
+
+        System.out.println("Cargando modelo desde el string: "+s);
         ScreenControls.modelo = new Modelo(s);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println(ScreenControls.modelo);
+        System.out.println("Modelo cargado");
     }
 
 }

@@ -34,17 +34,20 @@ public class ScreenControls extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_controls);
 
+        Button logoutButton = findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+        });
+
         WsClient.currentActivity = this;
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         // CREATE TABLE
-        TableLayout tableLayout = new TableLayout(this);
+        TableLayout tableLayout = createSwitchTable();
 
-        for(int x = 0 ; x < 3 ; x ++){
+        /*for(int x = 0 ; x < 3 ; x ++){
 
             // CREATE TABLE ROW
             TableRow tableRow = new TableRow(this);
@@ -115,35 +118,31 @@ public class ScreenControls extends AppCompatActivity {
             // ADD TABLEROW TO TABLELAYOUT
 
             tableLayout.addView(tableRow);
-        }
+        }*/
 
-        ScrollView contentView = new ScrollView(this);
-        contentView.setBackgroundColor(Color.LTGRAY);
+//        ScrollView contentView = new ScrollView(this);
+//        contentView.setBackgroundColor(Color.LTGRAY);
+//
+//        // THIS IS OUR MAIN LAYOUT
+//        LinearLayout mainLayout = new LinearLayout(this);
+//        mainLayout.setOrientation(LinearLayout.VERTICAL);
+//
+//        // ADD MAINLAYOUT TO SCROLLVIEW (contentView)
+//
+//        contentView.addView(mainLayout);
+//
+//        // SET CONTENT VIEW
+//
+//        setContentView(contentView);
+//
+//        TableLayout tableLayoutProgrammatically = tableLayout;
+//
+//        mainLayout.addView(tableLayoutProgrammatically);
 
-        // THIS IS OUR MAIN LAYOUT
-        LinearLayout mainLayout = new LinearLayout(this);
-        mainLayout.setOrientation(LinearLayout.VERTICAL);
-
-        // ADD MAINLAYOUT TO SCROLLVIEW (contentView)
-
-        contentView.addView(mainLayout);
-
-        // SET CONTENT VIEW
-
+        View contentView = tableLayout;
         setContentView(contentView);
 
-        TableLayout tableLayoutProgrammatically = tableLayout;
 
-        mainLayout.addView(tableLayoutProgrammatically);
-
-
-        Button logoutButton = findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logout();
-            }
-        });
 
 
     }
@@ -206,7 +205,9 @@ public class ScreenControls extends AppCompatActivity {
         TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
         TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
         TableLayout table = new TableLayout(this);
+        System.out.println("Cantidad de bloques: "+modelo.blocks.size());
         for (ToggleButton t : modelo.blocks.get(0).getToggleButtons()) {
+
             TableRow row = new TableRow(this);
             TextView textLabel = new TextView(this);
             Switch s = createSwitch(t);
