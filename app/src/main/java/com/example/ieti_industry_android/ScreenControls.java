@@ -179,6 +179,7 @@ public class ScreenControls extends AppCompatActivity {
         slider.setValueTo(s.getMax());
         slider.setValue(s.getState());
         slider.setStepSize(s.getStep());
+        slider.setId(s.getId());
         return slider;
     }
 
@@ -199,6 +200,7 @@ public class ScreenControls extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, listOptions);
         spinner.setAdapter(adapter);
         spinner.setSelection(index);
+        spinner.setId(d.getId());
         return spinner;
     }
 
@@ -259,7 +261,9 @@ public class ScreenControls extends AppCompatActivity {
             s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+                    String state = String.valueOf(s.getSelectedItemPosition());
+                    String[] values = {"block1",String.valueOf(s.getId()),"dropdown",state};
+                    socket.change(values);
                 }
 
                 @Override
@@ -289,6 +293,15 @@ public class ScreenControls extends AppCompatActivity {
             TableRow row = new TableRow(this);
             TextView textLabel = new TextView(this);
             Slider slider = createSlider(s);
+
+            slider.addOnChangeListener(new Slider.OnChangeListener() {
+                @Override
+                public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                    String state = String.valueOf(Math.round(slider.getValue()));
+                    String[] values = {"block1",String.valueOf(slider.getId()),"slider",state};
+                    socket.change(values);
+                }
+            });
 
             textLabel.setText(s.getLabel());
             textLabel.setLayoutParams(params1);
