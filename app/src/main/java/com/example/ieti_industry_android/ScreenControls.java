@@ -36,14 +36,8 @@ public class ScreenControls extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_controls);
 
-        Button logoutButton = findViewById(R.id.logoutButton);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logout();
-            }
-        });
-        Switch s = findViewById(R.id.switchprueba);
+
+        //Switch s = findViewById(R.id.switchprueba);
 
 
         WsClient.currentActivity = this;
@@ -361,6 +355,20 @@ public class ScreenControls extends AppCompatActivity {
         // ADD TABLEROW TO TABLELAYOUT
         tableRow.addView(createSliderTable());
         tableRow.addView(createSensorTable());
+
+        tableLayout.addView(tableRow);
+
+        Button logoutButton = new Button(this);
+        logoutButton.setText("SORTIR");
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+        });
+
+        tableRow = new TableRow(this);
+        tableRow.addView(logoutButton);
 
         tableLayout.addView(tableRow);
 
