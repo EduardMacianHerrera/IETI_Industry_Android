@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -28,6 +29,15 @@ public class ScreenControls extends AppCompatActivity {
     static WsClient socket;
     static AlertDialog.Builder popup;
 
+    ArrayList<ToggleButton> switches = modelo.blocks.get(0).getToggleButtons();
+    ArrayList<com.example.ieti_industry_android.Slider> sliders = modelo.blocks.get(0).getSliders();
+    ArrayList<Sensor> sensors = modelo.blocks.get(0).getSensors();
+    ArrayList<Dropdown> spinners = modelo.blocks.get(0).getDropdowns();
+    ArrayAdapter<ToggleButton> adapterSwitch;
+    ArrayAdapter<Dropdown> adapterSpinner;
+    ArrayAdapter<com.example.ieti_industry_android.Slider> adapterSlider;
+    ArrayAdapter<Sensor> adapterSensor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +53,18 @@ public class ScreenControls extends AppCompatActivity {
         createSpinnerTable();
         createSliderTable();
         createSensorTable();
+
+
+        Button logoutButton = findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("a");
+                modelo.blocks.get(0).getToggleButtons().get(0).setState("on");
+                adapterSwitch.notifyDataSetChanged();
+                System.out.println(modelo.blocks.get(0).getToggleButtons().get(0).getState());
+            }
+        });
 
         // CREATE TABLE
 
@@ -184,9 +206,9 @@ public class ScreenControls extends AppCompatActivity {
 
     public void createSwitchTable() {
         ListView list = findViewById(R.id.switchList);
-        ArrayList<ToggleButton> switches = modelo.blocks.get(0).getToggleButtons();
         System.out.println(switches.size());
-        ArrayAdapter<ToggleButton> adapter = new ArrayAdapter<ToggleButton>(this, R.layout.switch_layout, switches) {
+        System.out.println("switches creado");
+        adapterSwitch = new ArrayAdapter<ToggleButton>(this, R.layout.switch_layout, switches) {
             @Override
             public View getView(int pos, View convertView, ViewGroup container) {
                 // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
@@ -197,7 +219,7 @@ public class ScreenControls extends AppCompatActivity {
                 // "Pintem" valors (també quan es refresca)
                 ((TextView) convertView.findViewById(R.id.label)).setText(getItem(pos).getLabel());
                 Switch s = ((Switch) convertView.findViewById(R.id.toggleButton));
-                if (getItem(pos).getState() == "on") {
+                if (getItem(pos).getState().equals("on")) {
                     s.setChecked(true);
                 }
                 s.setOnClickListener(new View.OnClickListener() {
@@ -216,14 +238,13 @@ public class ScreenControls extends AppCompatActivity {
                 return convertView;
             }
         };
-        list.setAdapter(adapter);
+        list.setAdapter(adapterSwitch);
 
     }
 
     public void createSpinnerTable() {
         ListView list = findViewById(R.id.spinnerList);
-        ArrayList<Dropdown> spinners = modelo.blocks.get(0).getDropdowns();
-        ArrayAdapter<Dropdown> adapter = new ArrayAdapter<Dropdown>(this, R.layout.switch_layout, spinners) {
+        adapterSpinner = new ArrayAdapter<Dropdown>(this, R.layout.switch_layout, spinners) {
             @Override
             public View getView(int pos, View convertView, ViewGroup container) {
                 // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
@@ -263,13 +284,13 @@ public class ScreenControls extends AppCompatActivity {
                 return convertView;
             }
         };
-        list.setAdapter(adapter);
+        list.setAdapter(adapterSpinner);
     }
 
     public void createSliderTable() {
         ListView list = findViewById(R.id.sliderList);
-        ArrayList<com.example.ieti_industry_android.Slider> sliders = modelo.blocks.get(0).getSliders();
-        ArrayAdapter<com.example.ieti_industry_android.Slider> adapter = new ArrayAdapter<com.example.ieti_industry_android.Slider>(this, R.layout.switch_layout, sliders) {
+
+        adapterSlider = new ArrayAdapter<com.example.ieti_industry_android.Slider>(this, R.layout.switch_layout, sliders) {
             @Override
             public View getView(int pos, View convertView, ViewGroup container) {
                 // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
@@ -288,21 +309,20 @@ public class ScreenControls extends AppCompatActivity {
                     @Override
                     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
                         String state = String.valueOf(Math.round(slider.getValue()));
-                        String[] values = {"block1",String.valueOf(slider.getId()),"slider",state};
+                        String[] values = {"block1",String.valueOf(getItem(pos).getId()),"slider",state};
                         socket.change(values);
                     }
                 });
                 return convertView;
             }
         };
-        list.setAdapter(adapter);
+        list.setAdapter(adapterSlider);
     }
 
 
     public void createSensorTable() {
         ListView list = findViewById(R.id.sensorList);
-        ArrayList<Sensor> sliders = modelo.blocks.get(0).getSensors();
-        ArrayAdapter<Sensor> adapter = new ArrayAdapter<Sensor>(this, R.layout.sensor_layout, sliders) {
+        adapterSensor = new ArrayAdapter<Sensor>(this, R.layout.sensor_layout, sensors) {
             @Override
             public View getView(int pos, View convertView, ViewGroup container) {
                 // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
@@ -316,7 +336,62 @@ public class ScreenControls extends AppCompatActivity {
                 return convertView;
             }
         };
-        list.setAdapter(adapter);
+        list.setAdapter(adapterSensor);
     }
+
+    //[block1,2,slider,2]
+    public void updateInterfaz(String[] arrays) {
+        System.out.println("Iniciando cambio");
+        String nameBlock = arrays[0];
+        String id = arrays[1];
+        String type = arrays[2];
+        String value = arrays[3];
+        for (String s : arrays) {
+            System.out.println(s);
+        }
+        for (Block b : modelo.getBlocks()) {
+            if (b.getName().equals(nameBlock)) {
+                switch (type) {
+                    case "switch":
+                        for (ToggleButton t : b.getToggleButtons()) {
+                            if (id.equals(String.valueOf(t.getId()))) {
+                                System.out.println("putamierda + "+adapterSwitch.getCount());
+                                System.out.println(value);
+                                System.out.println(t.getId());
+                                System.out.println(id);
+                                t.setState("on");
+                                adapterSwitch.notifyDataSetChanged();
+                            }
+                        }
+                        break;
+
+                    case "slider":
+                        for (com.example.ieti_industry_android.Slider s : b.getSliders()) {
+                            if (id.equals(String.valueOf(s.getId()))) {
+                                s.setState(Integer.parseInt(value));
+                                adapterSlider.notifyDataSetChanged();
+                            }
+                        }
+                        break;
+
+                    case "dropdown":
+                        for (Dropdown d : b.getDropdowns()) {
+                            if (id.equals(String.valueOf(d.getId()))) {
+                                d.setState(value);
+                                adapterSpinner.notifyDataSetChanged();
+                            }
+                        }
+                        break;
+
+                    case "sensor":
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
 
 }

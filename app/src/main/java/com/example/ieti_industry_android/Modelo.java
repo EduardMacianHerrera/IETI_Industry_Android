@@ -158,4 +158,12 @@ public class Modelo {
             }
         }
     }
+
+    public static ArrayList<Block> getBlocks() {
+        return blocks;
+    }
+
+    public static void setBlocks(ArrayList<Block> blocks) {
+        Modelo.blocks = blocks;
+    }
 }

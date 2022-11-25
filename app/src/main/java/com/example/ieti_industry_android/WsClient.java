@@ -38,10 +38,11 @@ public class WsClient {
                 public void onMessage(ByteBuffer message) {
                     System.out.println("Array recibido: "+message);
                     Object obj = bytesToObject(message);
-                    String[] user = (String[]) obj;
-                    for (String s : user) {
+                    String[] cambio = (String[]) obj;
+                    for (String s: cambio) {
                         System.out.println(s);
                     }
+                    ((ScreenControls) currentActivity).updateInterfaz(cambio);
                 }
 
                 public void onMessage(String message) {
@@ -117,4 +118,6 @@ public class WsClient {
     public void change(String[] arrayDades) {
         client.send(objToBytes(arrayDades));
     }
+
+
 }

@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login(boolean isCorrect) {
+        System.out.println("login");
         if (isCorrect) {
             socket.client.send("getModel");
             ScreenControls.socket = MainActivity.socket;
