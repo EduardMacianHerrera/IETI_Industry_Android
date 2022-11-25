@@ -4,16 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TableLayout;
@@ -22,7 +20,6 @@ import android.widget.TextView;
 
 import com.google.android.material.slider.Slider;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class ScreenControls extends AppCompatActivity {
@@ -42,8 +39,12 @@ public class ScreenControls extends AppCompatActivity {
 
         WsClient.currentActivity = this;
 
+        createSwitchTable();
+        createSpinnerTable();
+        createSliderTable();
+        createSensorTable();
+
         // CREATE TABLE
-        TableLayout tableLayout = tableLayout();
 
         /*for(int x = 0 ; x < 3 ; x ++){
 
@@ -118,31 +119,7 @@ public class ScreenControls extends AppCompatActivity {
             tableLayout.addView(tableRow);
         }*/
 
-//        ScrollView contentView = new ScrollView(this);
-//        contentView.setBackgroundColor(Color.LTGRAY);
-//
-//        // THIS IS OUR MAIN LAYOUT
-//        LinearLayout mainLayout = new LinearLayout(this);
-//        mainLayout.setOrientation(LinearLayout.VERTICAL);
-//
-//        // ADD MAINLAYOUT TO SCROLLVIEW (contentView)
-//
-//        contentView.addView(mainLayout);
-//
-//        // SET CONTENT VIEW
-//
-//        setContentView(contentView);
-//
-//        TableLayout tableLayoutProgrammatically = tableLayout;
-//
-//        mainLayout.addView(tableLayoutProgrammatically);
-
-        View contentView = tableLayout;
-        setContentView(contentView);
     }
-
-
-
 
 
     public void logout() {
@@ -174,6 +151,7 @@ public class ScreenControls extends AppCompatActivity {
         slider.setValue(s.getState());
         slider.setStepSize(s.getStep());
         slider.setId(s.getId());
+        slider.setScrollBarSize(50);
         return slider;
     }
 
@@ -204,174 +182,141 @@ public class ScreenControls extends AppCompatActivity {
         return t;
     }
 
-    public TableLayout createSwitchTable() {
-        TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-        TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
-        TableLayout table = new TableLayout(this);
-        System.out.println("Cantidad de bloques: "+modelo.blocks.size());
-        for (ToggleButton t : modelo.blocks.get(0).getToggleButtons()) {
-
-            TableRow row = new TableRow(this);
-            TextView textLabel = new TextView(this);
-            Switch s = createSwitch(t);
-
-            s.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String state = "";
-                    if (s.isChecked()){
-                        state = "on";
-                    } else {
-                        state = "off";
-                    }
-                    String[] values = {"block1",String.valueOf(s.getId()),"switch",state};
-                    socket.change(values);
-                }
-            });
-
-            textLabel.setText(t.getLabel());
-            textLabel.setLayoutParams(params1);
-            s.setLayoutParams(params1);
-
-            row.addView(textLabel);
-            row.addView(s);
-            row.setLayoutParams(params2);
-            table.addView(row);
-        }
-        return table;
-    }
-
-    public TableLayout createSpinnerTable() {
-        TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-        TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
-        TableLayout table = new TableLayout(this);
-        System.out.println("Cantidad de bloques: "+modelo.blocks.size());
-        for (Dropdown d : modelo.blocks.get(0).getDropdowns()) {
-
-            TableRow row = new TableRow(this);
-            TextView textLabel = new TextView(this);
-            Spinner s = createSpinner(d);
-
-            s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    String state = String.valueOf(s.getSelectedItemPosition());
-                    String[] values = {"block1",String.valueOf(s.getId()),"dropdown",state};
-                    socket.change(values);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-
-            textLabel.setText(d.getLabel());
-            textLabel.setLayoutParams(params1);
-            s.setLayoutParams(params1);
-
-            row.addView(textLabel);
-            row.addView(s);
-            row.setLayoutParams(params2);
-            table.addView(row);
-        }
-        return table;
-    }
-
-    public TableLayout createSliderTable() {
-        TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-        TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
-        TableLayout table = new TableLayout(this);
-        System.out.println("Cantidad de bloques: "+modelo.blocks.size());
-        for (com.example.ieti_industry_android.Slider s : modelo.blocks.get(0).getSliders()) {
-            TableRow row = new TableRow(this);
-            TextView textLabel = new TextView(this);
-            Slider slider = createSlider(s);
-
-            slider.addOnChangeListener(new Slider.OnChangeListener() {
-                @Override
-                public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
-                    String state = String.valueOf(Math.round(slider.getValue()));
-                    String[] values = {"block1",String.valueOf(slider.getId()),"slider",state};
-                    socket.change(values);
-                }
-            });
-
-            textLabel.setText(s.getLabel());
-            textLabel.setLayoutParams(params1);
-            slider.setLayoutParams(params1);
-
-            row.addView(textLabel);
-            row.addView(slider);
-            row.setLayoutParams(params2);
-            table.addView(row);
-        }
-        return table;
-    }
-
-    public TableLayout createSensorTable() {
-        TableRow.LayoutParams params1 = new TableRow.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT, 1.0f);
-        TableRow.LayoutParams params2 = new TableRow.LayoutParams(TableLayout.LayoutParams.FILL_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
-        TableLayout table = new TableLayout(this);
-        System.out.println("Cantidad de bloques: "+modelo.blocks.size());
-        for (Sensor s : modelo.blocks.get(0).getSensors()) {
-            TableRow row = new TableRow(this);
-            TextView textLabel = new TextView(this);
-            TextView sensor = createSensor(s);
-
-            textLabel.setText(s.getLabel());
-            textLabel.setLayoutParams(params1);
-            sensor.setLayoutParams(params1);
-
-            row.addView(textLabel);
-            row.addView(sensor);
-            row.setLayoutParams(params2);
-            table.addView(row);
-        }
-        return table;
-    }
-
-    public TableLayout tableLayout(){
-
-        // CREATE TABLE
-        TableLayout tableLayout = new TableLayout(this);
-
-        // CREATE TABLE ROW
-        TableRow tableRow = new TableRow(this);
-
-        // CREATE PARAM FOR MARGINING
-        TableRow.LayoutParams aParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,TableRow.LayoutParams.WRAP_CONTENT);
-        aParams.topMargin = 2;
-        aParams.rightMargin = 2;
-        // ADD TABLEROW TO TABLELAYOUT
-
-        tableLayout.addView(tableRow);
-
-        tableRow.addView(createSwitchTable());
-        tableRow.addView(createSpinnerTable());
-
-        // CREATE TABLE ROW
-        tableRow = new TableRow(this);
-        // ADD TABLEROW TO TABLELAYOUT
-        tableRow.addView(createSliderTable());
-        tableRow.addView(createSensorTable());
-
-        tableLayout.addView(tableRow);
-
-        Button logoutButton = new Button(this);
-        logoutButton.setText("SORTIR");
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+    public void createSwitchTable() {
+        ListView list = findViewById(R.id.switchList);
+        ArrayList<ToggleButton> switches = modelo.blocks.get(0).getToggleButtons();
+        System.out.println(switches.size());
+        ArrayAdapter<ToggleButton> adapter = new ArrayAdapter<ToggleButton>(this, R.layout.switch_layout, switches) {
             @Override
-            public void onClick(View view) {
-                logout();
+            public View getView(int pos, View convertView, ViewGroup container) {
+                // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
+                if (convertView == null) {
+                    // inicialitzem l'element la View amb el seu layout
+                    convertView = getLayoutInflater().inflate(R.layout.switch_layout, container, false);
+                }
+                // "Pintem" valors (també quan es refresca)
+                ((TextView) convertView.findViewById(R.id.label)).setText(getItem(pos).getLabel());
+                Switch s = ((Switch) convertView.findViewById(R.id.toggleButton));
+                if (getItem(pos).getState() == "on") {
+                    s.setChecked(true);
+                }
+                s.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String state = "";
+                        if (s.isChecked()) {
+                            state = "on";
+                        } else {
+                            state = "off";
+                        }
+                        String[] values = {"block1", String.valueOf(switches.get(pos).getId()), "switch", state};
+                        socket.change(values);
+                    }
+                });
+                return convertView;
             }
-        });
+        };
+        list.setAdapter(adapter);
 
-        tableRow = new TableRow(this);
-        tableRow.addView(logoutButton);
-
-        tableLayout.addView(tableRow);
-
-        return tableLayout;
     }
+
+    public void createSpinnerTable() {
+        ListView list = findViewById(R.id.spinnerList);
+        ArrayList<Dropdown> spinners = modelo.blocks.get(0).getDropdowns();
+        ArrayAdapter<Dropdown> adapter = new ArrayAdapter<Dropdown>(this, R.layout.switch_layout, spinners) {
+            @Override
+            public View getView(int pos, View convertView, ViewGroup container) {
+                // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
+                if (convertView == null) {
+                    // inicialitzem l'element la View amb el seu layout
+                    convertView = getLayoutInflater().inflate(R.layout.spinner_layout, container, false);
+                }
+                // "Pintem" valors (també quan es refresca)
+                ((TextView) convertView.findViewById(R.id.label)).setText(getItem(pos).getLabel());
+                Spinner s = ((Spinner) convertView.findViewById(R.id.spinner));
+                ArrayList<String> listOptions = new ArrayList<String>();
+                int index = 0;
+                for (int i = 0; i < getItem(pos).getoptions().size(); i++) {
+                    Option o = getItem(pos).getoptions().get(i);
+                    listOptions.add(o.getLabel());
+                    if (o.getValue().equals(getItem(pos).getState())) {
+                        index = i;
+                    }
+                }
+                ArrayAdapter<String> adapterOption = new ArrayAdapter<String>(ScreenControls.this,
+                        android.R.layout.simple_spinner_item, listOptions);
+                s.setAdapter(adapterOption);
+                s.setSelection(index);
+                s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        String state = String.valueOf(s.getSelectedItemPosition());
+                        String[] values = {"block1", String.valueOf(getItem(pos).getId()), "dropdown", state};
+                        socket.change(values);
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+                return convertView;
+            }
+        };
+        list.setAdapter(adapter);
+    }
+
+    public void createSliderTable() {
+        ListView list = findViewById(R.id.sliderList);
+        ArrayList<com.example.ieti_industry_android.Slider> sliders = modelo.blocks.get(0).getSliders();
+        ArrayAdapter<com.example.ieti_industry_android.Slider> adapter = new ArrayAdapter<com.example.ieti_industry_android.Slider>(this, R.layout.switch_layout, sliders) {
+            @Override
+            public View getView(int pos, View convertView, ViewGroup container) {
+                // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
+                if (convertView == null) {
+                    // inicialitzem l'element la View amb el seu layout
+                    convertView = getLayoutInflater().inflate(R.layout.slider_layout, container, false);
+                }
+                // "Pintem" valors (també quan es refresca)
+                ((TextView) convertView.findViewById(R.id.label)).setText(getItem(pos).getLabel());
+                Slider s = ((Slider) convertView.findViewById(R.id.slider));
+                s.setStepSize(getItem(pos).getStep());
+                s.setValueFrom(getItem(pos).getMin());
+                s.setValueTo(getItem(pos).getMax());
+                s.setValue(getItem(pos).getState());
+                s.addOnChangeListener(new Slider.OnChangeListener() {
+                    @Override
+                    public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                        String state = String.valueOf(Math.round(slider.getValue()));
+                        String[] values = {"block1",String.valueOf(slider.getId()),"slider",state};
+                        socket.change(values);
+                    }
+                });
+                return convertView;
+            }
+        };
+        list.setAdapter(adapter);
+    }
+
+
+    public void createSensorTable() {
+        ListView list = findViewById(R.id.sensorList);
+        ArrayList<Sensor> sliders = modelo.blocks.get(0).getSensors();
+        ArrayAdapter<Sensor> adapter = new ArrayAdapter<Sensor>(this, R.layout.sensor_layout, sliders) {
+            @Override
+            public View getView(int pos, View convertView, ViewGroup container) {
+                // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
+                if (convertView == null) {
+                    // inicialitzem l'element la View amb el seu layout
+                    convertView = getLayoutInflater().inflate(R.layout.sensor_layout, container, false);
+                }
+                // "Pintem" valors (també quan es refresca)
+                ((TextView) convertView.findViewById(R.id.label)).setText(getItem(pos).getLabel());
+                ((TextView) convertView.findViewById(R.id.sensor)).setText(String.valueOf(getItem(pos).getThresholdLow()));
+                return convertView;
+            }
+        };
+        list.setAdapter(adapter);
+    }
+
 }

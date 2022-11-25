@@ -16,6 +16,7 @@ import android.widget.Toast;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.io.ByteArrayInputStream;
@@ -32,8 +33,6 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     int port = 8888;
-    String location = "10.0.2.2";
-    String uri = "ws://" + location + ":" + port;
     static WsClient socket = new WsClient();
 
 
@@ -52,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                WsClient.location = server.getText().toString();
                 /*
                 Log.i("SERVER", server.getText().toString());
                 Log.i("USER", user.getText().toString());
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadModel(String s) {
 
-        System.out.println("Cargando modelo desde el string: "+s);
+        System.out.println("Cargando modelo desde el string: " + s);
         ScreenControls.modelo = new Modelo(s);
         System.out.println("Modelo cargado");
     }

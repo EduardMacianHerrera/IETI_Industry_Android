@@ -3,13 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/drawable/border.xml" value="0.16" />
         <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_dropdown.xml" value="0.16" />
         <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_screen_controls.xml" value="0.176" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_screen_controls.xml" value="0.264" />
         <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_sensor.xml" value="0.11302083333333333" />
         <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_slider.xml" value="0.16799999999999998" />
         <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/activity_switch.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/block_layout.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/sensor_layout.xml" value="0.536" />
         <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/slider_layout.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/spinner_layout.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/alum-01/AndroidStudioProjects/IETI_Industry_Android/app/src/main/res/layout/switch_layout.xml" value="0.1793478260869565" />
       </map>
     </option>
   </component>

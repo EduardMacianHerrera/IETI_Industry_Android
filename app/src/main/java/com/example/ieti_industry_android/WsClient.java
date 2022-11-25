@@ -23,14 +23,14 @@ import java.util.HashMap;
 
 public class WsClient {
     int port = 8888;
-    String location = "10.0.2.2";
-    String uri = "ws://" + location + ":" + port;
+    static String location;
     WebSocketClient client;
     static Activity currentActivity;
 
 
 
     public void connecta() {
+        String uri = "ws://" + location + ":" + port;
         try {
             System.out.println("connecting");
             client = new WebSocketClient(new URI(uri), (Draft) new Draft_6455()) {
