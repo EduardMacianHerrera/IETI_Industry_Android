@@ -188,7 +188,7 @@ public class ScreenControls extends AppCompatActivity {
                         } else {
                             state = "off";
                         }
-                        String[] values = {modelo.getBlocks().get(blocknum).getName(), String.valueOf(modelo.getBlocks().get(blocknum).getToggleButtons().get(pos).getState()), "switch", state};
+                        String[] values = {modelo.getBlocks().get(blocknum).getName(), String.valueOf(modelo.getBlocks().get(blocknum).getToggleButtons().get(pos).getId()), "switch", state};
                         socket.change(values);
                     }
                 });

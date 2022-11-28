@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             socket.client.send(socket.objToBytes(arrayUser));
                             break;
-                        } catch (WebsocketNotConnectedException e) {
+                        } catch (Exception e) {
                             Thread.sleep(500);
                             wait += 500;
                         }
