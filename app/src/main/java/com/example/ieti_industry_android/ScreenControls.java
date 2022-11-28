@@ -3,9 +3,10 @@ package com.example.ieti_industry_android;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.google.android.material.slider.Slider;
@@ -27,12 +26,9 @@ public class ScreenControls extends AppCompatActivity {
 
     static Modelo modelo;
     static WsClient socket;
-    static AlertDialog.Builder popup;
+    static int blocknum;
 
-    ArrayList<ToggleButton> switches = modelo.blocks.get(0).getToggleButtons();
-    ArrayList<com.example.ieti_industry_android.Slider> sliders = modelo.blocks.get(0).getSliders();
-    ArrayList<Sensor> sensors = modelo.blocks.get(0).getSensors();
-    ArrayList<Dropdown> spinners = modelo.blocks.get(0).getDropdowns();
+
     ArrayAdapter<ToggleButton> adapterSwitch;
     ArrayAdapter<Dropdown> adapterSpinner;
     ArrayAdapter<com.example.ieti_industry_android.Slider> adapterSlider;
@@ -43,8 +39,7 @@ public class ScreenControls extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_controls);
 
-
-        //Switch s = findViewById(R.id.switchprueba);
+        System.out.println("blocks" + modelo.getBlocks().size());
 
 
         WsClient.currentActivity = this;
@@ -66,80 +61,35 @@ public class ScreenControls extends AppCompatActivity {
             }
         });
 
-        // CREATE TABLE
+        Button prevButton = findViewById(R.id.prevBlockButton);
+        if (blocknum == 0) {
+            prevButton.setVisibility(View.GONE);
+        } else {
+            prevButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ScreenControls.socket = MainActivity.socket;
+                    blocknum--;
+                    Intent intent = new Intent(ScreenControls.this, ScreenControls.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
-        /*for(int x = 0 ; x < 3 ; x ++){
-
-            // CREATE TABLE ROW
-            TableRow tableRow = new TableRow(this);
-
-            // CREATE PARAM FOR MARGINING
-            TableRow.LayoutParams aParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-            aParams.topMargin = 2;
-            aParams.rightMargin = 2;
-
-            TableRow.LayoutParams bParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-            bParams.topMargin = 2;
-            bParams.rightMargin = 2;
-
-            // SET THE SPAN IF x == 2
-            bParams.span = x==2 ? 2 : 1;
-
-            TableRow.LayoutParams cParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-            cParams.topMargin = 2;
-            cParams.rightMargin = 2;
-
-            TableRow.LayoutParams dParams = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-            dParams.topMargin = 2;
-            dParams.rightMargin = 2;
-
-
-            // CREATE TEXTVIEW
-
-            TextView a = new TextView(this);
-            TextView b = new TextView(this);
-            TextView c = new TextView(this);
-            TextView d = new TextView(this);
-
-            // SET PARAMS
-
-            a.setLayoutParams(aParams);
-            b.setLayoutParams(bParams);
-            c.setLayoutParams(cParams);
-            d.setLayoutParams(dParams);
-
-            // SET BACKGROUND COLOR
-
-            a.setBackgroundColor(Color.WHITE);
-            b.setBackgroundColor(Color.WHITE);
-            c.setBackgroundColor(Color.WHITE);
-            d.setBackgroundColor(Color.WHITE);
-
-            // SET PADDING
-
-            a.setPadding(20, 20, 20, 20);
-            b.setPadding(20, 20, 20, 20);
-            c.setPadding(20, 20, 20, 20);
-            d.setPadding(20, 20, 20, 20);
-
-            // SET TEXTVIEW TEXT
-
-            a.setText("A"+ (x+1));
-            b.setText("B"+ (x+1));
-            c.setText("C"+ (x+1));
-            d.setText("D"+ (x+1));
-
-            // ADD TEXTVIEW TO TABLEROW
-
-            tableRow.addView(a);
-            tableRow.addView(b);
-            tableRow.addView(c);
-            tableRow.addView(d);
-
-            // ADD TABLEROW TO TABLELAYOUT
-
-            tableLayout.addView(tableRow);
-        }*/
+        Button nextButton = findViewById(R.id.nextBlockButton);
+        if (blocknum == modelo.getBlocks().size() - 1) {
+            nextButton.setVisibility(View.GONE);
+        } else {
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ScreenControls.socket = MainActivity.socket;
+                    blocknum++;
+                    Intent intent = new Intent(ScreenControls.this, ScreenControls.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
     }
 
@@ -152,9 +102,18 @@ public class ScreenControls extends AppCompatActivity {
     }
 
     public void connectionLost() {
-        Intent intent = new Intent(ScreenControls.this, MainActivity.class);
-        MainActivity.socket = ScreenControls.socket;
-        startActivity(intent);
+        AlertDialog.Builder popup = new AlertDialog.Builder(ScreenControls.this);
+        popup.setTitle("T'has desconectat del servidor. \nRetornant a la pantalla d'inici.");
+        popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(ScreenControls.this, MainActivity.class);
+                MainActivity.socket = ScreenControls.socket;
+                startActivity(intent);
+            }
+        });
+        popup.create();
+        popup.show();
     }
 
     public Switch createSwitch(ToggleButton t) {
@@ -206,9 +165,7 @@ public class ScreenControls extends AppCompatActivity {
 
     public void createSwitchTable() {
         ListView list = findViewById(R.id.switchList);
-        System.out.println(switches.size());
-        System.out.println("switches creado");
-        adapterSwitch = new ArrayAdapter<ToggleButton>(this, R.layout.switch_layout, switches) {
+        adapterSwitch = new ArrayAdapter<ToggleButton>(this, R.layout.switch_layout, modelo.getBlocks().get(blocknum).getToggleButtons()) {
             @Override
             public View getView(int pos, View convertView, ViewGroup container) {
                 // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
@@ -219,7 +176,7 @@ public class ScreenControls extends AppCompatActivity {
                 // "Pintem" valors (també quan es refresca)
                 ((TextView) convertView.findViewById(R.id.label)).setText(getItem(pos).getLabel());
                 Switch s = ((Switch) convertView.findViewById(R.id.toggleButton));
-                if (getItem(pos).getState().equals("on")) {
+                if (getItem(pos).getState().equalsIgnoreCase("on")) {
                     s.setChecked(true);
                 }
                 s.setOnClickListener(new View.OnClickListener() {
@@ -231,7 +188,7 @@ public class ScreenControls extends AppCompatActivity {
                         } else {
                             state = "off";
                         }
-                        String[] values = {"block1", String.valueOf(switches.get(pos).getId()), "switch", state};
+                        String[] values = {modelo.getBlocks().get(blocknum).getName(), String.valueOf(modelo.getBlocks().get(blocknum).getToggleButtons().get(pos).getState()), "switch", state};
                         socket.change(values);
                     }
                 });
@@ -244,7 +201,7 @@ public class ScreenControls extends AppCompatActivity {
 
     public void createSpinnerTable() {
         ListView list = findViewById(R.id.spinnerList);
-        adapterSpinner = new ArrayAdapter<Dropdown>(this, R.layout.switch_layout, spinners) {
+        adapterSpinner = new ArrayAdapter<Dropdown>(this, R.layout.switch_layout, modelo.getBlocks().get(blocknum).getDropdowns()) {
             @Override
             public View getView(int pos, View convertView, ViewGroup container) {
                 // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
@@ -272,7 +229,7 @@ public class ScreenControls extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         String state = String.valueOf(s.getSelectedItemPosition());
-                        String[] values = {"block1", String.valueOf(getItem(pos).getId()), "dropdown", state};
+                        String[] values = {modelo.getBlocks().get(blocknum).getName(), String.valueOf(getItem(pos).getId()), "dropdown", state};
                         socket.change(values);
                     }
 
@@ -290,7 +247,7 @@ public class ScreenControls extends AppCompatActivity {
     public void createSliderTable() {
         ListView list = findViewById(R.id.sliderList);
 
-        adapterSlider = new ArrayAdapter<com.example.ieti_industry_android.Slider>(this, R.layout.switch_layout, sliders) {
+        adapterSlider = new ArrayAdapter<com.example.ieti_industry_android.Slider>(this, R.layout.switch_layout, modelo.getBlocks().get(blocknum).getSliders()) {
             @Override
             public View getView(int pos, View convertView, ViewGroup container) {
                 // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos
@@ -309,7 +266,7 @@ public class ScreenControls extends AppCompatActivity {
                     @Override
                     public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
                         String state = String.valueOf(Math.round(slider.getValue()));
-                        String[] values = {"block1",String.valueOf(getItem(pos).getId()),"slider",state};
+                        String[] values = {modelo.getBlocks().get(blocknum).getName(),String.valueOf(getItem(pos).getId()),"slider",state};
                         socket.change(values);
                     }
                 });
@@ -322,7 +279,7 @@ public class ScreenControls extends AppCompatActivity {
 
     public void createSensorTable() {
         ListView list = findViewById(R.id.sensorList);
-        adapterSensor = new ArrayAdapter<Sensor>(this, R.layout.sensor_layout, sensors) {
+        adapterSensor = new ArrayAdapter<Sensor>(this, R.layout.sensor_layout, modelo.getBlocks().get(blocknum).getSensors()) {
             @Override
             public View getView(int pos, View convertView, ViewGroup container) {
                 // getView ens construeix el layout i hi "pinta" els valors de l'element en la posició pos

@@ -32,7 +32,7 @@ import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
-    int port = 8888;
+
     static WsClient socket = new WsClient();
 
 
@@ -57,14 +57,47 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("USER", user.getText().toString());
                 Log.i("PASS", password.getText().toString());
                  */
-                socket.connecta();
                 String[] arrayUser = {user.getText().toString(), password.getText().toString()};
+                try {
+                    socket.connecta();
+                    int wait = 0;
+                    while (wait < 5000) {
+                        try {
+                            socket.client.send(socket.objToBytes(arrayUser));
+                            break;
+                        } catch (WebsocketNotConnectedException e) {
+                            Thread.sleep(500);
+                            wait += 500;
+                        }
+                    }
+                } catch (URISyntaxException e) {
+                    AlertDialog.Builder popup = new AlertDialog.Builder(MainActivity.this);
+                    popup.setTitle("ERROR: no s'ha trobat el servidor");
+                    popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    popup.create();
+                    popup.show();
+                } catch (Exception e) {
+                    AlertDialog.Builder popup = new AlertDialog.Builder(MainActivity.this);
+                    popup.setTitle("ERROR INESPERAT");
+                    popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    popup.create();
+                    popup.show();
+                }
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                socket.client.send(socket.objToBytes(arrayUser));
             }
         });
 

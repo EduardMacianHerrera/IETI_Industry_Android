@@ -11,7 +11,7 @@
         android:layout_width="146dp"
         android:layout_height="48dp"
         android:layout_marginBottom="16dp"
-        android:text="LOGOUT"
+        android:text="Next Block"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.894"
@@ -24,7 +24,7 @@
         android:layout_width="146dp"
         android:layout_height="48dp"
         android:layout_marginBottom="16dp"
-        android:text="LOGOUT"
+        android:text="Prev. Block"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.105"
@@ -35,14 +35,14 @@
     <ListView
         android:id="@+id/sensorList"
         android:layout_width="165dp"
-        android:layout_height="257dp"
+        android:layout_height="237dp"
         android:background="@drawable/border"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerList"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.886"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.82" />
+        app:layout_constraintHorizontal_bias="0.471"
+        app:layout_constraintStart_toEndOf="@+id/spinnerList"
+        app:layout_constraintTop_toTopOf="@+id/spinnerList"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView7"
@@ -63,26 +63,27 @@
     <ListView
         android:id="@+id/sliderList"
         android:layout_width="165dp"
-        android:layout_height="257dp"
+        android:layout_height="237dp"
         android:background="@drawable/border"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/switchList"
+        app:layout_constraintEnd_toEndOf="@+id/sensorList"
         app:layout_constraintHorizontal_bias="0.886"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.221" />
+        app:layout_constraintStart_toStartOf="@+id/sensorList"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.259" />
 
     <ListView
         android:id="@+id/switchList"
         android:layout_width="165dp"
-        android:layout_height="257dp"
+        android:layout_height="237dp"
+        android:layout_marginBottom="286dp"
         android:background="@drawable/border"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/spinnerList"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerList"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/spinnerList"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.215" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textView4"
@@ -103,14 +104,14 @@
     <ListView
         android:id="@+id/spinnerList"
         android:layout_width="165dp"
-        android:layout_height="257dp"
+        android:layout_height="237dp"
         android:background="@drawable/border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.113"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.82" />
+        app:layout_constraintVertical_bias="0.795" />
 
     <TextView
         android:id="@+id/textView6"
@@ -146,15 +147,28 @@
 
     <Button
         android:id="@+id/logoutButton"
-        android:layout_width="146dp"
+        android:layout_width="108dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
         android:text="LOGOUT"
+        app:layout_constraintBottom_toBottomOf="@+id/blockName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintStart_toEndOf="@+id/blockName"
+        app:layout_constraintTop_toTopOf="@+id/blockName"
+        app:layout_constraintVertical_bias="0.203" />
+
+    <TextView
+        android:id="@+id/blockName"
+        android:layout_width="174dp"
+        android:layout_height="37dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="@font/share_tech"
+        android:text="Block"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintHorizontal_bias="0.118"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.03" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

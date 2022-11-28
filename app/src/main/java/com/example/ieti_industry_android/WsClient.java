@@ -29,9 +29,8 @@ public class WsClient {
 
 
 
-    public void connecta() {
+    public void connecta() throws URISyntaxException {
         String uri = "ws://" + location + ":" + port;
-        try {
             System.out.println("connecting");
             client = new WebSocketClient(new URI(uri), (Draft) new Draft_6455()) {
                 @Override
@@ -72,11 +71,6 @@ public class WsClient {
                 }
             };
             client.connect();
-
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            System.out.println("Error: " + uri + " no és una direcció URI de WebSocket vàlida");
-        }
     }
 
 
