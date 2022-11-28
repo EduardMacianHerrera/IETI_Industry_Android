@@ -47,11 +47,12 @@
     <TextView
         android:id="@+id/textView7"
         android:layout_width="165dp"
-        android:layout_height="15dp"
+        android:layout_height="27dp"
         android:fontFamily="@font/share_tech"
-        android:text="Switches"
+        android:text="Sensors"
         android:textAlignment="center"
         android:textColor="#000000"
+        android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/sensorList"
         app:layout_constraintEnd_toEndOf="@+id/sensorList"
@@ -88,12 +89,13 @@
     <TextView
         android:id="@+id/textView4"
         android:layout_width="165dp"
-        android:layout_height="15dp"
+        android:layout_height="27dp"
         android:fontFamily="@font/share_tech"
         android:text="Switches"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textStyle="bold"
+        android:textSize="25dp"
         app:layout_constraintBottom_toTopOf="@+id/switchList"
         app:layout_constraintEnd_toEndOf="@+id/switchList"
         app:layout_constraintHorizontal_bias="0.0"
@@ -116,12 +118,13 @@
     <TextView
         android:id="@+id/textView6"
         android:layout_width="165dp"
-        android:layout_height="15dp"
+        android:layout_height="27dp"
         android:fontFamily="@font/share_tech"
         android:text="Spinners"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textStyle="bold"
+        android:textSize="25dp"
         app:layout_constraintBottom_toTopOf="@+id/spinnerList"
         app:layout_constraintEnd_toEndOf="@+id/spinnerList"
         app:layout_constraintHorizontal_bias="0.0"
@@ -132,11 +135,12 @@
     <TextView
         android:id="@+id/textView5"
         android:layout_width="165dp"
-        android:layout_height="15dp"
+        android:layout_height="27dp"
         android:fontFamily="@font/share_tech"
         android:text="Sliders"
         android:textAlignment="center"
         android:textColor="#000000"
+        android:textSize="25dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/sliderList"
         app:layout_constraintEnd_toEndOf="@+id/sliderList"
@@ -152,10 +156,10 @@
         android:text="LOGOUT"
         app:layout_constraintBottom_toBottomOf="@+id/blockName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintHorizontal_bias="0.554"
         app:layout_constraintStart_toEndOf="@+id/blockName"
         app:layout_constraintTop_toTopOf="@+id/blockName"
-        app:layout_constraintVertical_bias="0.203" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/blockName"
@@ -164,11 +168,12 @@
         android:layout_marginBottom="36dp"
         android:fontFamily="@font/share_tech"
         android:text="Block"
+        android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.118"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintVertical_bias="0.044" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

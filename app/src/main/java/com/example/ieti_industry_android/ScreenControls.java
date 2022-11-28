@@ -29,6 +29,8 @@ public class ScreenControls extends AppCompatActivity {
     static Modelo modelo;
     static WsClient socket;
     static int blocknum;
+    static boolean flag = false;
+
 
 
     ArrayAdapter<ToggleButton> adapterSwitch;
@@ -43,6 +45,9 @@ public class ScreenControls extends AppCompatActivity {
 
         System.out.println("blocks" + modelo.getBlocks().size());
 
+        TextView titol = findViewById(R.id.blockName);
+        titol.setText(modelo.getBlocks().get(blocknum).getName());
+        titol.setAllCaps(true);
 
         WsClient.currentActivity = this;
 
@@ -56,10 +61,7 @@ public class ScreenControls extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("a");
-                modelo.blocks.get(0).getToggleButtons().get(0).setState("on");
-                adapterSwitch.notifyDataSetChanged();
-                System.out.println(modelo.blocks.get(0).getToggleButtons().get(0).getState());
+                logout();
             }
         });
 
@@ -104,18 +106,24 @@ public class ScreenControls extends AppCompatActivity {
     }
 
     public void connectionLost() {
-        AlertDialog.Builder popup = new AlertDialog.Builder(ScreenControls.this);
-        popup.setTitle("T'has desconectat del servidor. \nRetornant a la pantalla d'inici.");
-        popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = new Intent(ScreenControls.this, MainActivity.class);
-                MainActivity.socket = ScreenControls.socket;
-                startActivity(intent);
+            public void run() {
+                AlertDialog.Builder popup = new AlertDialog.Builder(ScreenControls.this);
+                popup.setTitle("T'has desconectat del servidor. \nRetornant a la pantalla d'inici.");
+                popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(ScreenControls.this, MainActivity.class);
+                        MainActivity.socket = ScreenControls.socket;
+                        startActivity(intent);
+                    }
+                });
+                popup.create();
+                popup.show();
             }
         });
-        popup.create();
-        popup.show();
     }
 
     public Switch createSwitch(ToggleButton t) {
@@ -180,6 +188,8 @@ public class ScreenControls extends AppCompatActivity {
                 Switch s = ((Switch) convertView.findViewById(R.id.toggleButton));
                 if (getItem(pos).getState().equalsIgnoreCase("on")) {
                     s.setChecked(true);
+                } else {
+                    s.setChecked(false);
                 }
                 s.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -230,9 +240,14 @@ public class ScreenControls extends AppCompatActivity {
                 s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        String state = String.valueOf(s.getSelectedItemPosition());
-                        String[] values = {modelo.getBlocks().get(blocknum).getName(), String.valueOf(getItem(pos).getId()), "dropdown", state};
-                        socket.change(values);
+                        if (flag){
+                            String state = String.valueOf(s.getSelectedItemPosition());
+                            String[] values = {modelo.getBlocks().get(blocknum).getName(), String.valueOf(getItem(pos).getId()), "dropdown", state};
+                            socket.change(values);
+                            flag = false;
+                        } else {
+                            flag = true;
+                        }
                     }
 
                     @Override
@@ -264,9 +279,21 @@ public class ScreenControls extends AppCompatActivity {
                 s.setValueFrom(getItem(pos).getMin());
                 s.setValueTo(getItem(pos).getMax());
                 s.setValue(getItem(pos).getState());
-                s.addOnChangeListener(new Slider.OnChangeListener() {
+//                s.addOnChangeListener(new Slider.OnChangeListener() {
+//                    @Override
+//                    public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+//
+//                    }
+//                });
+                s.addOnSliderTouchListener(new Slider.OnSliderTouchListener(){
+
                     @Override
-                    public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                    public void onStartTrackingTouch(@NonNull Slider slider) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(@NonNull Slider slider) {
                         String state = String.valueOf(Math.round(slider.getValue()));
                         String[] values = {modelo.getBlocks().get(blocknum).getName(),String.valueOf(getItem(pos).getId()),"slider",state};
                         socket.change(values);
@@ -345,14 +372,19 @@ public class ScreenControls extends AppCompatActivity {
                     case "dropdown":
                         for (Dropdown d : b.getDropdowns()) {
                             if (id.equals(String.valueOf(d.getId()))) {
-                                d.setState(value);
-                                handler.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        System.out.println("Notificiacion");
-                                        adapterSpinner.notifyDataSetChanged();
-                                    }
-                                });
+                                if (flag){
+                                    d.setState(value);
+                                    handler.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            System.out.println("Notificiacion");
+                                            adapterSpinner.notifyDataSetChanged();
+                                        }
+                                    });
+                                    flag = false;
+                                } else {
+                                    flag = true;
+                                }
                             }
                         }
                         break;

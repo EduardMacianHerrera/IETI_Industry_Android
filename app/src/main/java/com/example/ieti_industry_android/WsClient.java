@@ -1,7 +1,9 @@
 package com.example.ieti_industry_android;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -24,11 +26,12 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 
 public class WsClient {
+
     int port = 8888;
     static String location;
     WebSocketClient client;
     static Activity currentActivity;
-    Handler handler = new Handler(Looper.getMainLooper());
+
 
 
 
@@ -50,9 +53,32 @@ public class WsClient {
                 public void onMessage(String message) {
                     System.out.println("Mensaje: "+message);
                     if ((message.equalsIgnoreCase("true") || message.equalsIgnoreCase("false")) && currentActivity instanceof MainActivity) {
-                        ((MainActivity) currentActivity).login(Boolean.parseBoolean(message));
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((MainActivity) currentActivity).login(Boolean.parseBoolean(message));
+                            }
+                        });
                     } else if (message.contains("block")){
                         ((MainActivity) currentActivity).loadModel(message);
+                    } else {
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder popup = new AlertDialog.Builder(((MainActivity) currentActivity));
+                                popup.setTitle("ERROR: no s'ha detectat cap model");
+                                popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                });
+                                popup.create();
+                                popup.show();
+                            }
+                        });
                     }
                 }
 
@@ -73,7 +99,7 @@ public class WsClient {
                     ex.printStackTrace();
                 }
             };
-            client.connect();
+        client.connect();
     }
 
 

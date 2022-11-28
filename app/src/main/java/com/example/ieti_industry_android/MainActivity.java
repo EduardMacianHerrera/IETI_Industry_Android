@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -60,42 +62,42 @@ public class MainActivity extends AppCompatActivity {
                 String[] arrayUser = {user.getText().toString(), password.getText().toString()};
                 try {
                     socket.connecta();
-                    int wait = 0;
-                    while (wait < 5000) {
-                        try {
-                            socket.client.send(socket.objToBytes(arrayUser));
-                            break;
-                        } catch (Exception e) {
-                            Thread.sleep(500);
-                            wait += 500;
-                        }
-                    }
-                } catch (URISyntaxException e) {
-                    AlertDialog.Builder popup = new AlertDialog.Builder(MainActivity.this);
-                    popup.setTitle("ERROR: no s'ha trobat el servidor");
-                    popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    });
-                    popup.create();
-                    popup.show();
-                } catch (Exception e) {
-                    AlertDialog.Builder popup = new AlertDialog.Builder(MainActivity.this);
-                    popup.setTitle("ERROR INESPERAT");
-                    popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                        }
-                    });
-                    popup.create();
-                    popup.show();
-                }
-                try {
                     Thread.sleep(500);
-                } catch (InterruptedException e) {
+                    socket.client.send(socket.objToBytes(arrayUser));
+                } catch (URISyntaxException | WebsocketNotConnectedException e) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder popup = new AlertDialog.Builder(MainActivity.this);
+                            popup.setTitle("ERROR: No s'ha trobat el servidor");
+                            popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            });
+                            popup.create();
+                            popup.show();
+                        }
+                    });
+                } catch (Exception e) {
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertDialog.Builder popup = new AlertDialog.Builder(MainActivity.this);
+                            popup.setTitle("ERROR INESPERAT");
+                            popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            });
+                            popup.create();
+                            popup.show();
+                        }
+                    });
                     e.printStackTrace();
                 }
             }
@@ -105,23 +107,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void login(boolean isCorrect) {
-        System.out.println("login");
+
         if (isCorrect) {
             socket.client.send("getModel");
             ScreenControls.socket = MainActivity.socket;
             Intent intent = new Intent(MainActivity.this, ScreenControls.class);
             startActivity(intent);
         } else {
-            AlertDialog.Builder popup = new AlertDialog.Builder(MainActivity.this);
-            popup.setTitle("Login incorrecte, revisi els credencials");
-            popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
+                public void run() {
+                    AlertDialog.Builder popup = new AlertDialog.Builder(MainActivity.this);
+                    popup.setTitle("Login incorrecte, revisi els credencials");
+                    popup.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
+                        }
+                    });
+                    popup.create();
+                    popup.show();
                 }
             });
-            popup.create();
-            popup.show();
         }
     }
 
