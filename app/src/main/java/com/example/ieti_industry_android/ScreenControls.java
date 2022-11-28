@@ -264,9 +264,21 @@ public class ScreenControls extends AppCompatActivity {
                 s.setValueFrom(getItem(pos).getMin());
                 s.setValueTo(getItem(pos).getMax());
                 s.setValue(getItem(pos).getState());
-                s.addOnChangeListener(new Slider.OnChangeListener() {
+//                s.addOnChangeListener(new Slider.OnChangeListener() {
+//                    @Override
+//                    public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+//
+//                    }
+//                });
+                s.addOnSliderTouchListener(new Slider.OnSliderTouchListener(){
+
                     @Override
-                    public void onValueChange(@NonNull Slider slider, float value, boolean fromUser) {
+                    public void onStartTrackingTouch(@NonNull Slider slider) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(@NonNull Slider slider) {
                         String state = String.valueOf(Math.round(slider.getValue()));
                         String[] values = {modelo.getBlocks().get(blocknum).getName(),String.valueOf(getItem(pos).getId()),"slider",state};
                         socket.change(values);
