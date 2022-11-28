@@ -8,6 +8,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -298,6 +300,7 @@ public class ScreenControls extends AppCompatActivity {
 
     //[block1,2,slider,2]
     public void updateInterfaz(String[] arrays) {
+        Handler handler = new Handler(Looper.getMainLooper());
         System.out.println("Iniciando cambio");
         String nameBlock = arrays[0];
         String id = arrays[1];
@@ -312,12 +315,14 @@ public class ScreenControls extends AppCompatActivity {
                     case "switch":
                         for (ToggleButton t : b.getToggleButtons()) {
                             if (id.equals(String.valueOf(t.getId()))) {
-                                System.out.println("putamierda + "+adapterSwitch.getCount());
-                                System.out.println(value);
-                                System.out.println(t.getId());
-                                System.out.println(id);
-                                t.setState("on");
-                                adapterSwitch.notifyDataSetChanged();
+                                t.setState(value);
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("Notificiacion");
+                                        adapterSwitch.notifyDataSetChanged();
+                                    }
+                                });
                             }
                         }
                         break;
@@ -326,7 +331,13 @@ public class ScreenControls extends AppCompatActivity {
                         for (com.example.ieti_industry_android.Slider s : b.getSliders()) {
                             if (id.equals(String.valueOf(s.getId()))) {
                                 s.setState(Integer.parseInt(value));
-                                adapterSlider.notifyDataSetChanged();
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("Notificiacion");
+                                        adapterSlider.notifyDataSetChanged();
+                                    }
+                                });
                             }
                         }
                         break;
@@ -335,7 +346,13 @@ public class ScreenControls extends AppCompatActivity {
                         for (Dropdown d : b.getDropdowns()) {
                             if (id.equals(String.valueOf(d.getId()))) {
                                 d.setState(value);
-                                adapterSpinner.notifyDataSetChanged();
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        System.out.println("Notificiacion");
+                                        adapterSpinner.notifyDataSetChanged();
+                                    }
+                                });
                             }
                         }
                         break;

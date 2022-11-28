@@ -2,6 +2,8 @@ package com.example.ieti_industry_android;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import org.java_websocket.client.WebSocketClient;
@@ -26,6 +28,7 @@ public class WsClient {
     static String location;
     WebSocketClient client;
     static Activity currentActivity;
+    Handler handler = new Handler(Looper.getMainLooper());
 
 
 
