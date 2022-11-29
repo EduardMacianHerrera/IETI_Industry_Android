@@ -10,21 +10,13 @@ public class Modelo {
     public void loadModel(String string) {
         blocks = new ArrayList<Block>();
         String[] blockArray = string.split(";];");
-        System.out.println("Cantidad de bloques en el string: "+blockArray.length);
-
-        System.out.println("Bloque antes: "+blockArray[0]);
         for (String blockString : blockArray) {
             blockString += ";";
-            System.out.println("Bloque: "+blockString);
             String blockName = blockString.substring(0, blockString.indexOf(":"));
-            System.out.println("Nombre del bloque: "+blockName);
             Block block = new Block(blockName);
-            System.out.println("Block: "+block);
             blocks.add(block);
-            //System.out.println(block);
             String[] controlArray = blockString.substring(blockString.indexOf(":") + 2).split(";");
             for (String controlString : controlArray) {
-                System.out.println(controlString);
                 String controlType = controlString.substring(0, controlString.indexOf(":"));
                 String[] attrs = controlString.substring(controlString.indexOf(":[") + 2).split(",");
                 int id = 0;
@@ -36,7 +28,6 @@ public class Modelo {
                             if (!attr.equals("]")) {
                                 switch (attr.substring(0, attr.indexOf("="))) {
                                     case "state":
-                                        System.out.println(attr.substring(attr.indexOf("=") + 1));
                                         stateSwitch = attr.substring(attr.indexOf("=") + 1);
                                         break;
                                     case "id":
@@ -72,16 +63,13 @@ public class Modelo {
                                             String labelOption = null;
                                             String valueOption = null;
                                             for (String optionAttr : optionAttrs) {
-                                                System.out.println(optionAttr);
                                                 if (!optionAttr.equals("]")){
                                                     switch (optionAttr.substring(0, optionAttr.indexOf("="))) {
                                                         case "label":
                                                             labelOption = optionAttr.substring(optionAttr.indexOf("=") + 1);
-                                                            System.out.println("label " + labelOption);
                                                             break;
                                                         case "value":
                                                             valueOption = optionAttr.substring(optionAttr.indexOf("=") + 1);
-                                                            System.out.println("value " + valueOption);
                                                             break;
                                                     }
                                                 }

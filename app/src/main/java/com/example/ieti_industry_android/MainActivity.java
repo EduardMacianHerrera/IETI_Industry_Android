@@ -54,11 +54,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 WsClient.location = server.getText().toString();
-                /*
-                Log.i("SERVER", server.getText().toString());
-                Log.i("USER", user.getText().toString());
-                Log.i("PASS", password.getText().toString());
-                 */
                 String[] arrayUser = {user.getText().toString(), password.getText().toString()};
                 try {
                     socket.connecta();
@@ -134,10 +129,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadModel(String s) {
-
-        System.out.println("Cargando modelo desde el string: " + s);
         ScreenControls.modelo = new Modelo(s);
-        System.out.println("Modelo cargado");
     }
 
 }

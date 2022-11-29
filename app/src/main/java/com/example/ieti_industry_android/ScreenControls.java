@@ -43,8 +43,6 @@ public class ScreenControls extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_controls);
 
-        System.out.println("blocks" + modelo.getBlocks().size());
-
         TextView titol = findViewById(R.id.blockName);
         titol.setText(modelo.getBlocks().get(blocknum).getName());
         titol.setAllCaps(true);
@@ -124,53 +122,6 @@ public class ScreenControls extends AppCompatActivity {
                 popup.show();
             }
         });
-    }
-
-    public Switch createSwitch(ToggleButton t) {
-        Switch s = new Switch(this);
-        s.setId(t.getId());
-        if (t.getState().equals("on")) {
-            s.setChecked(true);
-        }
-        return s;
-    }
-
-    public Slider createSlider(com.example.ieti_industry_android.Slider s) {
-        Slider slider = new Slider(this);
-        slider.setValueFrom(s.getMin());
-        slider.setValueTo(s.getMax());
-        slider.setValue(s.getState());
-        slider.setStepSize(s.getStep());
-        slider.setId(s.getId());
-        slider.setScrollBarSize(50);
-        return slider;
-    }
-
-    public Spinner createSpinner(Dropdown d) {
-        Spinner spinner = new Spinner(this);
-        ArrayList<String> listOptions = new ArrayList<String>();
-        int index = 0;
-        for (int i = 0; i < d.getoptions().size(); i++) {
-            Option o = d.getoptions().get(i);
-            listOptions.add(o.getLabel());
-            System.out.println("a" + o.getValue());
-            System.out.println("b" + d.getState());
-            if (o.getValue().equals(d.getState())) {
-                index = i;
-            }
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, listOptions);
-        spinner.setAdapter(adapter);
-        spinner.setSelection(index);
-        spinner.setId(d.getId());
-        return spinner;
-    }
-
-    public TextView createSensor(Sensor s) {
-        TextView t = new TextView(this);
-        t.setText(s.getThresholdLow() + " " + s.getUnits());
-        return t;
     }
 
     public void createSwitchTable() {
@@ -328,7 +279,6 @@ public class ScreenControls extends AppCompatActivity {
     //[block1,2,slider,2]
     public void updateInterfaz(String[] arrays) {
         Handler handler = new Handler(Looper.getMainLooper());
-        System.out.println("Iniciando cambio");
         String nameBlock = arrays[0];
         String id = arrays[1];
         String type = arrays[2];
@@ -346,7 +296,6 @@ public class ScreenControls extends AppCompatActivity {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        System.out.println("Notificiacion");
                                         adapterSwitch.notifyDataSetChanged();
                                     }
                                 });
@@ -361,7 +310,6 @@ public class ScreenControls extends AppCompatActivity {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        System.out.println("Notificiacion");
                                         adapterSlider.notifyDataSetChanged();
                                     }
                                 });
@@ -377,7 +325,6 @@ public class ScreenControls extends AppCompatActivity {
                                     handler.post(new Runnable() {
                                         @Override
                                         public void run() {
-                                            System.out.println("Notificiacion");
                                             adapterSpinner.notifyDataSetChanged();
                                         }
                                     });
